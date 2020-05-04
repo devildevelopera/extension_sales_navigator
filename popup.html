@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+  <script src="js/jquery-3.4.1.min.js" integrity="sha256-QSuP+cWrMrkBn82EvNSlTA4mWhRShHT07kWyeiCr6us="
+    crossorigin="anonymous"></script>
+  <script src="popup.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="js/jquery.dataTables.js"></script>
+  <script src="js/dataTables.buttons.min.js"></script>
+  <script src="js/buttons.flash.min.js"></script>
+  <script src="js/jszip.min.js"></script>
+  <script src="js/pdfmake.min.js"></script>
+  <script src="js/vfs_fonts.js"></script>
+  <script src="js/buttons.html5.min.js"></script>
+  <script src="js/buttons.print.min.js"></script>
+</head>
+
+<body>
+  <div class="wholepart"style="text-align: center;">
+    <button class="btn btn-danger" id="close">x</button>
+    <div id="toolbar">
+      <img id="logo" src="img/octopus.png">
+    </div>
+    <p>
+      <button class="btn btn-info" id="refresh"><i class="fa fa-refresh"></i> Refresh</button>
+      <button class="btn btn-primary" id="next_page"><i class="fa fa-plus"></i> Next Page</button>
+    </p>
+    <p id="loading">
+      Loading...
+    </p>
+    <div id="result_table_view">
+
+    </div>
+  </div>
+</body>
+
+</html>

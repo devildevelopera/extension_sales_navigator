@@ -1,0 +1,19 @@
+body {
+    margin: 10px;
+}
+#toolbar {
+    text-align: center;
+}
+
+#logo {
+    width:280px;
+}
+
+.wholepart {
+    padding: 20px;
+}
+
+#close {
+    width: 38px;
+    float: right;
+}
