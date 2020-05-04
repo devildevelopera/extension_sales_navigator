@@ -1,6 +1,7 @@
 var data =[];
 var duplicate = false;
 var firstpage = true;
+var prelength = 0;
 
 $(document).ready( function () {
     $("#loading").hide();
@@ -9,8 +10,9 @@ $(document).ready( function () {
     })
     $('#refresh').on('click', function(){
         data=[];
-        display(data);
+        prelength = 0;
         firstpage = true;
+        $('#result_table_view').html('');
     })
     $('#next_page').on('click', function(){
         $("#loading").show();
@@ -36,7 +38,11 @@ chrome.runtime.onMessage.addListener(function (msg, sender, response) {
                 duplicate = false;
             }
         }
-        display(data);
+        if(data.length != prelength) {
+            display(data);
+        } else {
+            $("#loading").hide();
+        }
     }
     if(msg.type === "next_page_ready_popup") {
         chrome.runtime.sendMessage({type: "get_data"});
@@ -99,4 +105,9 @@ function display(data) {
         //     $(".dt-button.buttons-csv.buttons-html5")[0].click();
         // }
         $("#loading").hide();
+        var pauseTime = Math.random()*100 +200;
+        setTimeout(function(){
+            $('#next_page').click();
+        }, pauseTime);
+        prelength = data.length;
 }
