@@ -27,8 +27,13 @@ $(document).ready( function () {
 chrome.runtime.onMessage.addListener(function (msg, sender, response) {
     if (msg.type === "set_data_popup") {
         for (var i=0; i<msg.data.length; i++) {
+            if(msg.data[i].profile === "") {
+                $('#refresh').click();
+                alert("Something went wrong, Maybe profile view has been blocked!");
+                break;
+            }
             for(var j=0; j<data.length; j++){
-                if(msg.data[i].name === data[j].name) {
+                if(msg.data[i].profile === data[j].profile) {
                     duplicate = true;
                     break;
                 }
