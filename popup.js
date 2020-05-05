@@ -58,7 +58,7 @@ function display(data) {
                                     '<th>Position</th>'+
                                     '<th>CompanyName</th>'+
                                     '<th>Location</th>'+
-                                    '<th style="display: none">Profile</th>'+
+                                    '<th>Profile</th>'+
                                     '<th>Phone</th>'+
                                     '<th>Email</th>'+
                                     '<th>Url</th>'+
@@ -72,7 +72,7 @@ function display(data) {
                                 + '<td>'+data[i].position+'</td>'
                                 + '<td>'+data[i].company+'</td>'
                                 + '<td>'+data[i].location+'</td>'
-                                + '<td style="display: none">'+data[i].contact_url+'</td>'
+                                + '<td><a href="https://www.linkedin.com/sales/people/'+data[i].profile+'">'+data[i].profile+'</a></td>'
                                 + '<td>'+data[i].phone+'</td>'
                                 + '<td>'+data[i].email+'</td>'
                                 + '<td>'+data[i].url+'</td>'
@@ -98,7 +98,7 @@ function display(data) {
                         },
                 'excel', 'pdf', 'print'
             ],
-            pageLength: 5,
+            pageLength: 10,
         } );
         
         $("#loading").hide();

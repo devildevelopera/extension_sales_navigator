@@ -70,7 +70,7 @@ function get_data () {
                 var m = pageSource.indexOf(")&quot;", indexArray[i]+54);
                 var id = pageSource.substring(indexArray[i]+54, m);
                 var contact_url = "https://www.linkedin.com/sales/people/"+id;
-                // var contact_url = "https://www.linkedin.com/sales/people/ACwAAAXK9W4Brtx0fUy1TfY5ai2BCOYpPQt36Xo,NAME_SEARCH,TR8V?_ntb=91HUT6hxS%2BeKti0IEh8vdg%3D%3D";
+                // var contact_url = "https://www.linkedin.com/sales/people/ACwAABd4CrABMvWklVcvA-MWKdHWadAbFla_rtE,NAME_SEARCH,eqBi";
                 $.ajax({
                     type: "GET",
                     url: contact_url,
@@ -81,6 +81,7 @@ function get_data () {
                         var position = "";
                         var company = "";
                         var location = "";
+                        var profile = "";
                         var email = "";
                         var phone = "";
                         var url = "";
@@ -111,6 +112,14 @@ function get_data () {
                             var m = res.indexOf("&quot", n+21);
                             location = res.substring(n+21, m);
                         }
+                        var n = res.indexOf("entityUrn&quot;:&quot;urn:li:fs_salesProfile:(");
+                        if(n != -1){
+                            var k = res.indexOf("entityUrn&quot;:&quot;urn:li:fs_salesProfile:(", n+46);
+                            if(k != -1) {
+                                var m = res.indexOf(")&quot", k+46);
+                                profile = res.substring(k+46, m);
+                            }
+                        }
                         var n = res.indexOf("emailAddress&quot;:&quot;");
                         if(n != -1){
                             var m = res.indexOf("&quot", n+25);
@@ -138,7 +147,7 @@ function get_data () {
                             position,
                             company,
                             location,
-                            contact_url,
+                            profile,
                             phone,
                             email,
                             url,
