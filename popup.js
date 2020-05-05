@@ -112,9 +112,20 @@ function display(data) {
 }
 
 function start_timer() {
-    var seconds_left = Math.floor(Math.random()*60) + 60;
+    var seconds_left = 0;
+    if($("#running_type").is(":checked")) {
+        seconds_left = Math.floor(Math.random()*30) + 30;  // manual
+    } else {
+        seconds_left = Math.floor(Math.random()*120) + 180;  // auto
+    }
     var interval = setInterval(function() {
-        $('#timer_div').html(--seconds_left);
+        --seconds_left;
+        var mins = Math.floor(seconds_left/60);
+        var secs = Math.floor(seconds_left%60);
+        if(secs<10){
+            secs = "0" + secs;
+        }
+        $('#timer_div').html(mins + ":" + secs);
         if (seconds_left <= 0)
         {
             $('#timer_div').html("You are Ready!");
