@@ -58,7 +58,7 @@ function display(data) {
                                     '<th>Position</th>'+
                                     '<th>CompanyName</th>'+
                                     '<th>Location</th>'+
-                                    // '<th style="display: none">Profile</th>'+
+                                    '<th style="display: none">Profile</th>'+
                                     '<th>Phone</th>'+
                                     '<th>Email</th>'+
                                     '<th>Url</th>'+
@@ -72,7 +72,7 @@ function display(data) {
                                 + '<td>'+data[i].position+'</td>'
                                 + '<td>'+data[i].company+'</td>'
                                 + '<td>'+data[i].location+'</td>'
-                                // + '<td style="display: none">'+data[i].contact_url+'</td>'
+                                + '<td style="display: none">'+data[i].contact_url+'</td>'
                                 + '<td>'+data[i].phone+'</td>'
                                 + '<td>'+data[i].email+'</td>'
                                 + '<td>'+data[i].url+'</td>'
@@ -100,14 +100,26 @@ function display(data) {
             ],
             pageLength: 5,
         } );
-        // $("#add_more").prop('disabled', true);
-        // if(data.length > 0){
-        //     $(".dt-button.buttons-csv.buttons-html5")[0].click();
-        // }
+        
         $("#loading").hide();
-        var pauseTime = Math.random()*100 +200;
-        setTimeout(function(){
-            $('#next_page').click();
-        }, pauseTime);
+        start_timer();
         prelength = data.length;
+}
+
+function start_timer() {
+    var seconds_left = Math.floor(Math.random()*60) + 60;
+    var interval = setInterval(function() {
+        $('#timer_div').html(--seconds_left);
+        if (seconds_left <= 0)
+        {
+            $('#timer_div').html("You are Ready!");
+            clearInterval(interval);
+            $("#next_page").prop("disabled", false);
+            if(!$("#running_type").is(":checked")) {
+                $('#next_page').click();
+            }
+        } else {
+           $("#next_page").prop("disabled", true);
+        }
+    }, 1000);
 }
