@@ -77,7 +77,7 @@ function display(data) {
                                 + '<td>'+data[i].position+'</td>'
                                 + '<td>'+data[i].company+'</td>'
                                 + '<td>'+data[i].location+'</td>'
-                                + '<td><a href="https://www.linkedin.com/sales/people/'+data[i].profile+'">'+data[i].profile+'</a></td>'
+                                + '<td><a href="https://www.linkedin.com/sales/people/'+data[i].profile+'">https://www.linkedin.com/sales/people/'+data[i].profile+'</a></td>'
                                 + '<td>'+data[i].phone+'</td>'
                                 + '<td>'+data[i].email+'</td>'
                                 + '<td>'+data[i].url+'</td>'
