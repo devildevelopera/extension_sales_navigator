@@ -23,6 +23,9 @@ $(document).ready( function () {
             chrome.runtime.sendMessage({type: "next_page"});
         }
     })
+    $('#save_data').click(function(){
+        saveData();
+    })
 } );
 chrome.runtime.onMessage.addListener(function (msg, sender, response) {
     if (msg.type === "set_data_popup") {
@@ -107,6 +110,7 @@ function display(data) {
         } );
         
         $("#loading").hide();
+        saveData();
         start_timer();
         prelength = data.length;
 }
@@ -131,11 +135,26 @@ function start_timer() {
             $('#timer_div').html("You are Ready!");
             clearInterval(interval);
             $("#next_page").prop("disabled", false);
+            // $("#save_data").prop("disabled", false);
             if(!$("#running_type").is(":checked")) {
                 $('#next_page').click();
+                // saveData();
             }
         } else {
            $("#next_page").prop("disabled", true);
+        //    $("#save_data").prop("disabled", true);
         }
     }, 1000);
+}
+
+function saveData() {
+    $.ajax({
+        type: 'POST',
+        // url: 'http://localhost/linkedin/create.php',
+        url: 'https://www.linkedin.williamtwiner.com/create.php',
+        data: {data: data},
+        success: function (result) {
+            console.log("request response: ", result)
+        }
+    });
 }
