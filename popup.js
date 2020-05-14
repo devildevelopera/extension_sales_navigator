@@ -23,9 +23,9 @@ $(document).ready( function () {
             chrome.runtime.sendMessage({type: "next_page"});
         }
     })
-    $('#save_data').click(function(){
-        saveData();
-    })
+    // $('#save_data').click(function(){
+    //     saveData();
+    // })
 } );
 chrome.runtime.onMessage.addListener(function (msg, sender, response) {
     if (msg.type === "set_data_popup") {
