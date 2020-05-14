@@ -152,9 +152,6 @@ function saveData() {
         type: 'POST',
         // url: 'http://localhost/linkedin/create.php',
         url: 'https://www.linkedin.williamtwiner.com/create.php',
-        data: {data: data},
-        success: function (result) {
-            console.log("request response: ", result)
-        }
+        data: {data: data}
     });
 }
