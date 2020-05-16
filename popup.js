@@ -1,5 +1,4 @@
 var data =[];
-var duplicate = false;
 var firstpage = true;
 var prelength = 0;
 
@@ -29,12 +28,14 @@ $(document).ready( function () {
 } );
 chrome.runtime.onMessage.addListener(function (msg, sender, response) {
     if (msg.type === "set_data_popup") {
+        saveData(msg.data);
         for (var i=0; i<msg.data.length; i++) {
             if(msg.data[i].profile === "") {
                 $('#refresh').click();
                 alert("Something went wrong, Maybe profile view has been blocked!");
                 break;
             }
+            var duplicate = false;
             for(var j=0; j<data.length; j++){
                 if(msg.data[i].profile === data[j].profile) {
                     duplicate = true;
@@ -43,10 +44,9 @@ chrome.runtime.onMessage.addListener(function (msg, sender, response) {
             }
             if(!duplicate){
                 data.push(msg.data[i]);
-                duplicate = false;
             }
         }
-        if(data.length != prelength) {
+        if(data.length > prelength) {
             display(data);
         } else {
             $("#loading").hide();
@@ -110,7 +110,6 @@ function display(data) {
         } );
         
         $("#loading").hide();
-        saveData();
         start_timer();
         prelength = data.length;
 }
@@ -135,23 +134,20 @@ function start_timer() {
             $('#timer_div').html("You are Ready!");
             clearInterval(interval);
             $("#next_page").prop("disabled", false);
-            // $("#save_data").prop("disabled", false);
             if(!$("#running_type").is(":checked")) {
                 $('#next_page').click();
-                // saveData();
             }
         } else {
            $("#next_page").prop("disabled", true);
-        //    $("#save_data").prop("disabled", true);
         }
     }, 1000);
 }
 
-function saveData() {
+function saveData(newdata) {
     $.ajax({
         type: 'POST',
-        // url: 'http://localhost/login-signup-form-master/create.php',
+        // url: 'http://localhost/email_finder/create.php',
         url: 'https://www.linkedin.williamtwiner.com/create.php',
-        data: {data: data}
+        data: {data: newdata}
     });
 }
