@@ -17,3 +17,10 @@ body {
     width: 38px;
     float: right;
 }
+#usr {
+    margin: 3px auto 20px;
+    width: 300px;
+}
+#usr::placeholder {  
+    text-align: center; 
+} 

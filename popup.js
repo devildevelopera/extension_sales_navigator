@@ -25,6 +25,11 @@ $(document).ready( function () {
     // $('#save_data').click(function(){
     //     saveData();
     // })
+    $('#usr').on('keyup', function(e){
+        var searchval = e.target.value;
+        console.log("search name: ", searchval);
+        searchName(searchval);
+    })
 } );
 chrome.runtime.onMessage.addListener(function (msg, sender, response) {
     if (msg.type === "set_data_popup") {
@@ -150,4 +155,67 @@ function saveData(newdata) {
         url: 'https://www.linkedin.williamtwiner.com/create.php',
         data: {data: newdata}
     });
+}
+
+function searchName(val) {
+    var newdata = []
+    for(var i=0; i<data.length; i++) {
+        if(data[i].name.includes(val)) {
+            newdata.push(data[i]);
+        }
+    }
+    newdisplay(newdata);
+}
+
+function newdisplay(data) {
+    $('#result_table_view').html('');
+        var tableHtml = ' <table id="example" class="display nowrap" style="width:100%">'+
+                            '<thead>'+
+                                '<tr>'+
+                                    '<th>Name</th>'+
+                                    '<th>Position</th>'+
+                                    '<th>CompanyName</th>'+
+                                    '<th>Location</th>'+
+                                    '<th>Profile</th>'+
+                                    '<th>Phone</th>'+
+                                    '<th>Email</th>'+
+                                    '<th>Url</th>'+
+                                    '<th>Social</th>'+
+                                '</tr>'+
+                            '</thead>'+
+                            '<tbody>';
+        for(var i=0; i<data.length; i++){
+            tableHtml +=  '<tr>'
+                                + '<td>'+data[i].name+'</td>'
+                                + '<td>'+data[i].position+'</td>'
+                                + '<td>'+data[i].company+'</td>'
+                                + '<td>'+data[i].location+'</td>'
+                                + '<td><a href="https://www.linkedin.com/sales/people/'+data[i].profile+'">https://www.linkedin.com/sales/people/'+data[i].profile+'</a></td>'
+                                + '<td>'+data[i].phone+'</td>'
+                                + '<td>'+data[i].email+'</td>'
+                                + '<td>'+data[i].url+'</td>'
+                                + '<td>'+data[i].social+'</td>'
+                            + '</tr>';
+                   
+            }
+        tableHtml += '</tbody></table>';
+        $('#result_table_view').html(tableHtml);
+        $('#example').DataTable( {
+            bDestory: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy',
+                {
+                extend: 'csv',
+                text : 'CSV',
+                filename: function(){
+                                var d = new Date();
+                                var n = d.getTime();
+                                return 'myfile' + n;
+                            }
+                        },
+                'excel', 'pdf', 'print'
+            ],
+            pageLength: 10,
+        } );
 }
