@@ -1,4 +1,5 @@
-var data =[];
+var data = [];
+var newData = [];
 var firstpage = true;
 var prelength = 0;
 
@@ -22,18 +23,17 @@ $(document).ready( function () {
             chrome.runtime.sendMessage({type: "next_page"});
         }
     })
-    // $('#save_data').click(function(){
-    //     saveData();
-    // })
+    $('#save_data').click(function(){
+        saveData();
+    })
     $('#usr').on('keyup', function(e){
         var searchval = e.target.value;
-        console.log("search name: ", searchval);
         searchName(searchval);
     })
 } );
 chrome.runtime.onMessage.addListener(function (msg, sender, response) {
     if (msg.type === "set_data_popup") {
-        saveData(msg.data);
+        // saveData(msg.data);
         for (var i=0; i<msg.data.length; i++) {
             if(msg.data[i].profile === "") {
                 $('#refresh').click();
@@ -52,7 +52,12 @@ chrome.runtime.onMessage.addListener(function (msg, sender, response) {
             }
         }
         if(data.length > prelength) {
-            display(data);
+            // display(data);
+            $("#loading").hide();
+            start_timer();
+            prelength = data.length;
+            var searchval = $('#usr').val();
+            searchName(searchval);
         } else {
             $("#loading").hide();
         }
@@ -148,23 +153,31 @@ function start_timer() {
     }, 1000);
 }
 
-function saveData(newdata) {
+function saveData() {
+    var searchval = $('#usr').val();
+    if(searchval === '') {
+        alert("The data should be saved with search name!");
+        return;
+    }
+    for(var i=0; i<newData.length; i++) {
+        newData[i]['search_name'] = searchval;
+    }
     $.ajax({
         type: 'POST',
         // url: 'http://localhost/email_finder/create.php',
         url: 'https://www.linkedin.williamtwiner.com/create.php',
-        data: {data: newdata}
+        data: {data: newData}
     });
 }
 
 function searchName(val) {
-    var newdata = []
+    newData.splice(0, newData.length);
     for(var i=0; i<data.length; i++) {
         if(data[i].name.includes(val)) {
-            newdata.push(data[i]);
+            newData.push(data[i]);
         }
     }
-    newdisplay(newdata);
+    newdisplay(newData);
 }
 
 function newdisplay(data) {
