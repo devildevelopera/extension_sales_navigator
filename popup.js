@@ -5,8 +5,8 @@ var prelength = 0;
 $(document).ready( function () {
     $("#loading").hide();
     $("#next_page").prop("disabled", true);
-    $("#new_search").hide();
-    $("#end_search").prop("disabled", true);
+    $("#end_search").hide();
+    $("#start_search").prop("disabled", true);
 
     $('#close').click(function(){
         chrome.runtime.sendMessage({type: "close"});
@@ -26,27 +26,28 @@ $(document).ready( function () {
             chrome.runtime.sendMessage({type: "next_page"});
         }
     })
-    $('#end_search').click(function(){
-        $("#end_search").hide();
-        $("#new_search").show();
+    $('#start_search').click(function(){
+        $("#start_search").hide();
+        $("#end_search").show();
         $("#next_page").prop("disabled", false);
         $("#usr").prop("disabled", true);
     })
-    $('#new_search').click(function(){
+    $('#end_search').click(function(){
         refresh();
-        $("#end_search").show();
-        $("#new_search").hide();
+        $("#start_search").show();
+        $("#end_search").hide();
         $("#next_page").prop("disabled", true);
         $("#usr").prop("disabled", false);
         $("#usr").val("");
+        chrome.runtime.sendMessage({type: "close"});
     })
     $('#usr').on('keyup', function(e){
         var searchval = e.target.value;
         if(searchval) {
-            $("#end_search").prop("disabled", false);
+            $("#start_search").prop("disabled", false);
 
         } else {
-            $("#end_search").prop("disabled", true);
+            $("#start_search").prop("disabled", true);
         }
     })
     // $('#save_data').click(function(){
@@ -141,6 +142,7 @@ function display(data) {
                 'excel', 'pdf', 'print'
             ],
             pageLength: 10,
+            searching: false
         } );
         
         $("#loading").hide();
@@ -168,13 +170,13 @@ function start_timer() {
             $('#timer_div').html("You are Ready!");
             clearInterval(interval);
             $("#next_page").prop("disabled", false);
-            $("#new_search").prop("disabled", false);
+            $("#end_search").prop("disabled", false);
             if(!$("#running_type").is(":checked")) {
                 $('#next_page').click();
             }
         } else {
            $("#next_page").prop("disabled", true);
-           $("#new_search").prop("disabled", true);
+           $("#end_search").prop("disabled", true);
 
         }
     }, 1000);
