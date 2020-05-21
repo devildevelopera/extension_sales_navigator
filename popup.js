@@ -1,19 +1,22 @@
 var data = [];
-var newData = [];
 var firstpage = true;
 var prelength = 0;
 
 $(document).ready( function () {
     $("#loading").hide();
+    $("#next_page").prop("disabled", true);
+    $("#new_search").hide();
+    $("#end_search").prop("disabled", true);
+
     $('#close').click(function(){
         chrome.runtime.sendMessage({type: "close"});
     })
-    $('#refresh').on('click', function(){
-        data=[];
-        prelength = 0;
-        firstpage = true;
-        $('#result_table_view').html('');
-    })
+    // $('#refresh').on('click', function(){
+    //     data=[];
+    //     prelength = 0;
+    //     firstpage = true;
+    //     $('#result_table_view').html('');
+    // })
     $('#next_page').on('click', function(){
         $("#loading").show();
         if(firstpage) {
@@ -23,20 +26,39 @@ $(document).ready( function () {
             chrome.runtime.sendMessage({type: "next_page"});
         }
     })
-    $('#save_data').click(function(){
-        saveData();
+    $('#end_search').click(function(){
+        $("#end_search").hide();
+        $("#new_search").show();
+        $("#next_page").prop("disabled", false);
+        $("#usr").prop("disabled", true);
+    })
+    $('#new_search').click(function(){
+        refresh();
+        $("#end_search").show();
+        $("#new_search").hide();
+        $("#next_page").prop("disabled", true);
+        $("#usr").prop("disabled", false);
+        $("#usr").val("");
     })
     $('#usr').on('keyup', function(e){
         var searchval = e.target.value;
-        searchName(searchval);
+        if(searchval) {
+            $("#end_search").prop("disabled", false);
+
+        } else {
+            $("#end_search").prop("disabled", true);
+        }
     })
+    // $('#save_data').click(function(){
+    //     saveData();
+    // })
 } );
 chrome.runtime.onMessage.addListener(function (msg, sender, response) {
     if (msg.type === "set_data_popup") {
-        // saveData(msg.data);
+        saveData(msg.data);
         for (var i=0; i<msg.data.length; i++) {
             if(msg.data[i].profile === "") {
-                $('#refresh').click();
+                refresh();
                 alert("Something went wrong, Maybe profile view has been blocked!");
                 break;
             }
@@ -52,12 +74,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, response) {
             }
         }
         if(data.length > prelength) {
-            // display(data);
-            $("#loading").hide();
-            start_timer();
-            prelength = data.length;
-            var searchval = $('#usr').val();
-            searchName(searchval);
+            display(data);
         } else {
             $("#loading").hide();
         }
@@ -66,6 +83,13 @@ chrome.runtime.onMessage.addListener(function (msg, sender, response) {
         chrome.runtime.sendMessage({type: "get_data"});
     }
 });
+
+function refresh() {
+    data=[];
+    prelength = 0;
+    firstpage = true;
+    $('#result_table_view').html('');
+}
 
 function display(data) {
     $('#result_table_view').html('');
@@ -144,91 +168,28 @@ function start_timer() {
             $('#timer_div').html("You are Ready!");
             clearInterval(interval);
             $("#next_page").prop("disabled", false);
+            $("#new_search").prop("disabled", false);
             if(!$("#running_type").is(":checked")) {
                 $('#next_page').click();
             }
         } else {
            $("#next_page").prop("disabled", true);
+           $("#new_search").prop("disabled", true);
+
         }
     }, 1000);
 }
 
-function saveData() {
+function saveData(newData) {
     var searchval = $('#usr').val();
-    if(searchval === '') {
-        alert("The data should be saved with search name!");
-        return;
-    }
     for(var i=0; i<newData.length; i++) {
         newData[i]['search_name'] = searchval;
     }
+    console.log(newData)
     $.ajax({
         type: 'POST',
         // url: 'http://localhost/email_finder/create.php',
         url: 'https://www.linkedin.williamtwiner.com/create.php',
         data: {data: newData}
     });
-}
-
-function searchName(val) {
-    newData.splice(0, newData.length);
-    for(var i=0; i<data.length; i++) {
-        if(data[i].name.includes(val)) {
-            newData.push(data[i]);
-        }
-    }
-    newdisplay(newData);
-}
-
-function newdisplay(data) {
-    $('#result_table_view').html('');
-        var tableHtml = ' <table id="example" class="display nowrap" style="width:100%">'+
-                            '<thead>'+
-                                '<tr>'+
-                                    '<th>Name</th>'+
-                                    '<th>Position</th>'+
-                                    '<th>CompanyName</th>'+
-                                    '<th>Location</th>'+
-                                    '<th>Profile</th>'+
-                                    '<th>Phone</th>'+
-                                    '<th>Email</th>'+
-                                    '<th>Url</th>'+
-                                    '<th>Social</th>'+
-                                '</tr>'+
-                            '</thead>'+
-                            '<tbody>';
-        for(var i=0; i<data.length; i++){
-            tableHtml +=  '<tr>'
-                                + '<td>'+data[i].name+'</td>'
-                                + '<td>'+data[i].position+'</td>'
-                                + '<td>'+data[i].company+'</td>'
-                                + '<td>'+data[i].location+'</td>'
-                                + '<td><a href="https://www.linkedin.com/sales/people/'+data[i].profile+'">https://www.linkedin.com/sales/people/'+data[i].profile+'</a></td>'
-                                + '<td>'+data[i].phone+'</td>'
-                                + '<td>'+data[i].email+'</td>'
-                                + '<td>'+data[i].url+'</td>'
-                                + '<td>'+data[i].social+'</td>'
-                            + '</tr>';
-                   
-            }
-        tableHtml += '</tbody></table>';
-        $('#result_table_view').html(tableHtml);
-        $('#example').DataTable( {
-            bDestory: true,
-            dom: 'Bfrtip',
-            buttons: [
-                'copy',
-                {
-                extend: 'csv',
-                text : 'CSV',
-                filename: function(){
-                                var d = new Date();
-                                var n = d.getTime();
-                                return 'myfile' + n;
-                            }
-                        },
-                'excel', 'pdf', 'print'
-            ],
-            pageLength: 10,
-        } );
 }
