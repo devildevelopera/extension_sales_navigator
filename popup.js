@@ -60,7 +60,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, response) {
         for (var i=0; i<msg.data.length; i++) {
             if(msg.data[i].profile === "") {
                 refresh();
-                alert("Something went wrong, Maybe profile view has been blocked!");
+                console.log("Something went wrong, Maybe profile view has been blocked!");
                 break;
             }
             var duplicate = false;

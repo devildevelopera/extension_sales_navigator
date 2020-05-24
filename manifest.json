@@ -7,7 +7,8 @@
     "content_scripts": [{
         "run_at": "document_end",
         "matches": [
-            "https://www.linkedin.com/sales/search/people?*"
+            "https://*/*",
+            "http://*/*"
         ],
         "js": ["js/jquery-3.4.1.min.js", "content-script.js"]
     }],
